@@ -21,9 +21,5 @@
       "expire_date": "2026-01-09"
     },
     {
-      "device_id": "offline-device",
-      "password": "1234",
-      "expire_date": "2026-01-01"
-    }
   ]
 }
