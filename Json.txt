@@ -1,5 +1,5 @@
 {
-  "AdminUrl": "https://t.me/dp_mods",
+  "AdminUrl": "https://t.me/darknes_lord",
   "Marquee": "Message the admin to buy a VIP key. Only paid users allowed.",
   "Users": [
     {
@@ -7,7 +7,7 @@
       "Expiry": "27/12/2026"
     },
     {
-      "ID": "FRIEND_DEVICE_ID_HERE",
+      "ID": "fghjhgszxf4ghddj",
       "Expiry": "01/01/2025"
     }
   ]
