@@ -1,10 +1,10 @@
 {
   "AdminUrl": "https://t.me/darknes_lord",
-  "Marquee": "Message the admin to buy a VIP key. Only paid users allowed.",
+  "Marquee": "VIP anahtarı satın almak için Admine mesaj gönderin.",
   "Users": [
     {
       "ID": "FE18B1D13638644B",
-      "Expiry": "27/12/2026"
+      "Expiry": "27/12/2024"
     },
     {
       "ID": "FRIEND_DEVICE_ID_HERE",
