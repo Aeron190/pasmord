@@ -4,15 +4,15 @@
 
   "title": "Premium Login",
   "descriptions": [
-    "Merhaba Premium KullanÃÂÃÂ±cÃÂÃÂ±.",
-    "Devam etmek iÃÂÃÂ§in ÃÂÃÂifrenizi giriniz.",
-    "CihazÃÂÃÂ±nÃÂÃÂ±zÃÂÃÂ±n kayÃÂÃÂ±tlÃÂÃÂ± olduÃÂÃÂuna emin ol."
+    "Merhaba Premium KullanÃÂÃÂÃÂÃÂ±cÃÂÃÂÃÂÃÂ±.",
+    "Devam etmek iÃÂÃÂÃÂÃÂ§in ÃÂÃÂÃÂÃÂifrenizi giriniz.",
+    "CihazÃÂÃÂÃÂÃÂ±nÃÂÃÂÃÂÃÂ±zÃÂÃÂÃÂÃÂ±n kayÃÂÃÂÃÂÃÂ±tlÃÂÃÂÃÂÃÂ± olduÃÂÃÂÃÂÃÂuna emin ol."
   ],
 
   "button_login": "Login",
   "button_admin": "Admin",
   "button_copy": "Copy ID",
-  "admin_url": "https://YouTube.com",
+  "admin_url": "https://Facebook.com",
 
   "device_section": [
     {
