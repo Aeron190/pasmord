@@ -19,11 +19,6 @@
       "device_id": "fe18b1d13638644b",
       "password": "1122",
       "expire_date": "2026-01-31"
-    },
-    {
-      "device_id": "offline-device",
-      "password": "1234",
-      "expire_date": "2026-01-01"
     }
   ]
 }
