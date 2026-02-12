@@ -4,15 +4,15 @@
 
   "title": "Premium Login",
   "descriptions": [
-    "Merhaba Premium KullanÄ±cÄ±.",
-    "Devam etmek iÃ§in Åifrenizi giriniz.",
-    "CihazÄ±nÄ±zÄ±n kayÄ±tlÄ± olduÄuna emin ol."
+    "Merhaba Premium KullanÃÂ±cÃÂ±.",
+    "Devam etmek iÃÂ§in ÃÂifrenizi giriniz.",
+    "CihazÃÂ±nÃÂ±zÃÂ±n kayÃÂ±tlÃÂ± olduÃÂuna emin ol."
   ],
 
   "button_login": "Login",
   "button_admin": "Admin",
   "button_copy": "Copy ID",
-  "admin_url": "https://Facebook.com",
+  "admin_url": "https://Google.com",
 
   "device_section": [
     {
