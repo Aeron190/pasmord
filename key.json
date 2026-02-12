@@ -2,27 +2,27 @@
   "dialog_enable": true,
   "online_enable": true,
 
-  "başlık": "Premium Giriş",
-  "açıklamalar": [
+  "baÅlÄ±k": "Premium GiriÅ",
+  "aÃ§Ä±klamalar": [
     "Merhaba Premium Kullanici",
-    "Devam etmek icin şifrenizi giriniz.",
+    "Devam etmek icin Åifrenizi giriniz.",
     "Cihazinizin hazir oldugundan emin olun."
   ],
 
-  "button_login": "Giriş",
-  "button_admin": "Yönetici",
-  "button_copy": "Kimliği Kopyala",
+  "button_login": "GiriÅ",
+  "button_admin": "YÃ¶netici",
+  "button_copy": "KimliÄi Kopyala",
   "admin_url": "https://Darknes.com",
 
-  "cihaz_bölümü": [
+  "cihaz_bÃ¶lÃ¼mÃ¼": [
     {
       "device_id": "fe18b1d13638644b",
-      "şifre": "1881",
-      "son kullanma tarihi": "2026-02-09"
+      "Åifre": "1881",
+      "son kullanma tarihi": "2026-03-09"
     },
     {
       "device_id": "fbncgjmcgbbcbnn",
-      "şifre": "1881",
+      "Åifre": "1881",
       "son kullanma tarihi": "2026-02-09"
     },
   ]
