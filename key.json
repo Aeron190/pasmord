@@ -2,28 +2,28 @@
   "dialog_enable": true,
   "online_enable": true,
 
-  "title": "Premium Login",
-  "descriptions": [
-    "Merhaba Premium KullanÃÂÃÂÃÂÃÂ±cÃÂÃÂÃÂÃÂ±.",
-    "Devam etmek iÃÂÃÂÃÂÃÂ§in ÃÂÃÂÃÂÃÂifrenizi giriniz.",
-    "CihazÃÂÃÂÃÂÃÂ±nÃÂÃÂÃÂÃÂ±zÃÂÃÂÃÂÃÂ±n kayÃÂÃÂÃÂÃÂ±tlÃÂÃÂÃÂÃÂ± olduÃÂÃÂÃÂÃÂuna emin ol."
+  "başlık": "Premium Giriş",
+  "açıklamalar": [
+    "Merhaba Premium Kullanici",
+    "Devam etmek icin şifrenizi giriniz.",
+    "Cihazinizin hazir oldugundan emin olun."
   ],
 
-  "button_login": "Login",
-  "button_admin": "Admin",
-  "button_copy": "Copy ID",
+  "button_login": "Giriş",
+  "button_admin": "Yönetici",
+  "button_copy": "Kimliği Kopyala",
   "admin_url": "https://Darknes.com",
 
-  "device_section": [
+  "cihaz_bölümü": [
     {
       "device_id": "fe18b1d13638644b",
-      "password": "1881",
-      "expire_date": "2026-02-09"
+      "şifre": "1881",
+      "son kullanma tarihi": "2026-02-09"
     },
     {
       "device_id": "fbncgjmcgbbcbnn",
-      "password": "1881",
-      "expire_date": "2026-02-09"
+      "şifre": "1881",
+      "son kullanma tarihi": "2026-02-09"
     },
   ]
-}
+} 
