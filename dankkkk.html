@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>FRIBASE Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  .marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    background: #1f2937;
+    color: #f3e8ff;
+    padding: 12px 0;
+    font-weight: 600;
+  }
+  .marquee-content {
+    display: inline-block;
+    animation: marquee 25s linear infinite;
+  }
+  @keyframes marquee {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(-100%); }
+  }
+  .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(12px); }
+</style>
+</head>
+<body class="bg-zinc-950 text-zinc-200 font-sans">
+
+<!-- BAĞLANTI EKRANI -->
+<div id="connectScreen" class="min-h-screen flex items-center justify-center">
+  <div class="glass border border-purple-500/30 rounded-3xl p-10 w-full max-w-md shadow-2xl">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-purple-400">FRIBASE</h1>
+      <p class="text-zinc-400 mt-2">Admin Panel</p>
+    </div>
+    <div class="space-y-6">
+      <div>
+        <label class="block text-sm font-medium mb-2">FRIBASE Veri Linki</label>
+        <input id="dataLink" type="text" 
+               class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-5 py-4 focus:outline-none focus:border-purple-500"
+               placeholder="https://example.com/fribase.json" value="">
+        <p class="text-xs text-zinc-500 mt-1">Örnek: GitHub raw link veya public JSON URL</p>
+      </div>
+      <button onclick="connect()" 
+              class="w-full bg-purple-600 hover:bg-purple-700 transition py-4 rounded-2xl font-semibold text-lg">
+        Bağlan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ANA PANEL -->
+<div id="mainPanel" class="hidden min-h-screen">
+
+  <!-- HEADER -->
+  <header class="bg-zinc-900 border-b border-zinc-800 px-8 py-5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <i class="fa-solid fa-database text-3xl text-purple-400"></i>
+      <div>
+        <span class="text-2xl font-bold">FRIBASE</span>
+        <span class="text-zinc-500 text-sm block -mt-1">Admin Panel</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-6">
+      <button onclick="refreshData()" class="flex items-center gap-2 text-sm hover:text-purple-400 transition">
+        <i class="fa-solid fa-rotate"></i>
+        <span>Yenile</span>
+      </button>
+      <button onclick="showSettings()" class="flex items-center gap-2 text-sm hover:text-purple-400 transition">
+        <i class="fa-solid fa-cog"></i>
+        <span>Ayarlar</span>
+      </button>
+      <button onclick="disconnect()" class="px-6 py-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-2xl text-sm font-medium">
+        Çıkış
+      </button>
+    </div>
+  </header>
+
+  <!-- MARQUEE -->
+  <div id="marquee" class="marquee">
+    <div id="marqueeContent" class="marquee-content"></div>
+  </div>
+
+  <!-- ADMIN URL -->
+  <div class="bg-zinc-900 px-8 py-4 flex items-center gap-3 border-b border-zinc-800">
+    <i class="fa-solid fa-link text-purple-400"></i>
+    <span class="text-zinc-400 text-sm">Admin:</span>
+    <a id="adminUrlLink" href="#" target="_blank" class="text-purple-400 hover:underline font-medium"></a>
+  </div>
+
+  <div class="max-w-7xl mx-auto p-8">
+
+    <!-- KULLANICI EKLE BUTONU -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-3xl font-semibold">Kullanıcılar</h2>
+      <button onclick="showAddModal()" 
+              class="bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-2xl flex items-center gap-3 font-semibold">
+        <i class="fa-solid fa-plus"></i>
+        Yeni Kullanıcı Ekle
+      </button>
+    </div>
+
+    <!-- TABLO -->
+    <div class="glass border border-zinc-700 rounded-3xl overflow-hidden">
+      <table class="w-full">
+        <thead class="bg-zinc-900">
+          <tr>
+            <th class="text-left py-5 px-8 font-medium text-zinc-400">Kullanıcı ID</th>
+            <th class="text-left py-5 px-8 font-medium text-zinc-400">Son Kullanma Tarihi</th>
+            <th class="text-left py-5 px-8 font-medium text-zinc-400">Modder Link</th>
+            <th class="text-left py-5 px-8 font-medium text-zinc-400">Mesaj</th>
+            <th class="w-32"></th>
+          </tr>
+        </thead>
+        <tbody id="usersBody" class="text-sm"></tbody>
+      </table>
+    </div>
+
+    <div class="text-center mt-8 text-xs text-zinc-500">
+      Eklenen kullanıcılar en üstte görünür • Değişiklikleri kaydetmek için "Ayarlar" → Kaydet
+    </div>
+  </div>
+</div>
+
+<!-- YENİ KULLANICI MODALI -->
+<div id="addModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+  <div class="glass border border-purple-500/30 rounded-3xl p-8 w-full max-w-lg">
+    <h3 class="text-2xl font-semibold mb-6">Yeni Kullanıcı Ekle</h3>
+    
+    <div class="space-y-6">
+      <div>
+        <label class="block text-xs uppercase tracking-widest mb-1">Kullanıcı ID</label>
+        <input id="inpID" type="text" class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none" placeholder="3BA4A93F018DC799">
+      </div>
+      <div class="grid grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs uppercase tracking-widest mb-1">Tarih (GG/AA/YYYY)</label>
+          <input id="inpExpiry" type="text" class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none" placeholder="27/12/2026">
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-widest mb-1">Modder Link</label>
+          <input id="inpModder" type="url" class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none" placeholder="https://t.me/...">
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs uppercase tracking-widest mb-1">Mesaj</label>
+        <textarea id="inpMessage" rows="3" class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none resize-none" placeholder="VIP kullanıcıya özel mesaj..."></textarea>
+      </div>
+    </div>
+
+    <div class="flex gap-4 mt-10">
+      <button onclick="hideAddModal()" class="flex-1 py-4 rounded-2xl border border-zinc-700 font-medium">İptal</button>
+      <button onclick="saveNewUser()" class="flex-1 py-4 bg-purple-600 hover:bg-purple-700 rounded-2xl font-semibold">Kaydet ve Ekle</button>
+    </div>
+  </div>
+</div>
+
+<!-- AYARLAR MODALI -->
+<div id="settingsModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+  <div class="glass border border-purple-500/30 rounded-3xl p-8 w-full max-w-lg">
+    <h3 class="text-2xl font-semibold mb-6">Genel Ayarlar</h3>
+    
+    <div class="space-y-6">
+      <div>
+        <label class="block text-xs uppercase tracking-widest mb-1">Marquee Yazısı</label>
+        <input id="setMarquee" type="text" class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none">
+      </div>
+      <div>
+        <label class="block text-xs uppercase tracking-widest mb-1">Admin Telegram Linki</label>
+        <input id="setAdminUrl" type="text" class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-6 py-4 focus:outline-none">
+      </div>
+    </div>
+
+    <div class="mt-10 bg-zinc-900 rounded-2xl p-5">
+      <p class="text-xs text-zinc-400 mb-3">Mevcut JSON (kopyala ve kendi linkine yükle)</p>
+      <pre id="jsonPreview" class="text-xs bg-black p-4 rounded-xl overflow-auto max-h-48 text-purple-300"></pre>
+    </div>
+
+    <div class="flex gap-4 mt-8">
+      <button onclick="hideSettings()" class="flex-1 py-4 rounded-2xl border border-zinc-700 font-medium">Kapat</button>
+      <button onclick="copyJSON()" class="flex-1 py-4 bg-emerald-600 hover:bg-emerald-700 rounded-2xl font-semibold">JSON Kopyala</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== VERİLER ==========
+let config = {
+  AdminUrl: "https://t.me/dp_mods",
+  Marquee: "Message the admin to buy a VIP key. Only paid users allowed.",
+  Users: [
+    { ID: "3BA4A93F018DC799", Expiry: "27/12/2026", ModderLink: "", Message: "" },
+    { ID: "FRIEND_DEVICE_ID_HERE", Expiry: "01/01/2025", ModderLink: "", Message: "" }
+  ]
+};
+
+let dataLink = "";
+
+// ========== BAĞLAN ==========
+function connect() {
+  dataLink = document.getElementById("dataLink").value.trim();
+  
+  if (dataLink) {
+    fetch(dataLink)
+      .then(r => r.json())
+      .then(json => {
+        config = json;
+        loadPanel();
+      })
+      .catch(() => {
+        alert("Link okunamadı, varsayılan veri yüklendi.");
+        loadPanel();
+      });
+  } else {
+    loadPanel();
+  }
+}
+
+function loadPanel() {
+  document.getElementById("connectScreen").classList.add("hidden");
+  document.getElementById("mainPanel").classList.remove("hidden");
+  renderAll();
+}
+
+// ========== RENDER ==========
+function renderAll() {
+  // Marquee
+  document.getElementById("marqueeContent").innerHTML = config.Marquee;
+
+  // Admin URL
+  const linkEl = document.getElementById("adminUrlLink");
+  linkEl.href = config.AdminUrl;
+  linkEl.textContent = config.AdminUrl;
+
+  // Tablo
+  const tbody = document.getElementById("usersBody");
+  tbody.innerHTML = "";
+  
+  config.Users.forEach((user, index) => {
+    const tr = document.createElement("tr");
+    tr.className = "border-t border-zinc-800 hover:bg-zinc-900/50 transition";
+    tr.innerHTML = `
+      <td class="py-5 px-8 font-mono">${user.ID}</td>
+      <td class="py-5 px-8">${user.Expiry}</td>
+      <td class="py-5 px-8 text-purple-400">${user.ModderLink ? `<a href="${user.ModderLink}" target="_blank">${user.ModderLink}</a>` : '-'}</td>
+      <td class="py-5 px-8 text-zinc-400 max-w-xs truncate">${user.Message || '-'}</td>
+      <td class="py-5 px-8 text-right">
+        <button onclick="editUser(${index})" class="text-amber-400 hover:text-amber-300 mr-4"><i class="fa-solid fa-pen"></i></button>
+        <button onclick="deleteUser(${index})" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ========== MODALLAR ==========
+function showAddModal() {
+  document.getElementById("addModal").classList.remove("hidden");
+  document.getElementById("inpID").focus();
+}
+
+function hideAddModal() {
+  document.getElementById("addModal").classList.add("hidden");
+}
+
+function saveNewUser() {
+  const id = document.getElementById("inpID").value.trim();
+  const expiry = document.getElementById("inpExpiry").value.trim();
+  const modder = document.getElementById("inpModder").value.trim();
+  const msg = document.getElementById("inpMessage").value.trim();
+
+  if (!id || !expiry) {
+    alert("ID ve Tarih zorunlu!");
+    return;
+  }
+
+  config.Users.unshift({
+    ID: id,
+    Expiry: expiry,
+    ModderLink: modder,
+    Message: msg
+  });
+
+  hideAddModal();
+  renderAll();
+}
+
+function editUser(index) {
+  const u = config.Users[index];
+  document.getElementById("inpID").value = u.ID;
+  document.getElementById("inpExpiry").value = u.Expiry;
+  document.getElementById("inpModder").value = u.ModderLink || "";
+  document.getElementById("inpMessage").value = u.Message || "";
+  
+  showAddModal();
+  
+  // Kaydet butonunu geçici olarak edit moduna çevir
+  const saveBtn = document.querySelector("#addModal button[onclick='saveNewUser()']");
+  saveBtn.onclick = () => {
+    u.ID = document.getElementById("inpID").value.trim();
+    u.Expiry = document.getElementById("inpExpiry").value.trim();
+    u.ModderLink = document.getElementById("inpModder").value.trim();
+    u.Message = document.getElementById("inpMessage").value.trim();
+    hideAddModal();
+    renderAll();
+  };
+}
+
+function deleteUser(index) {
+  if (confirm("Bu kullanıcıyı silmek istediğine emin misin?")) {
+    config.Users.splice(index, 1);
+    renderAll();
+  }
+}
+
+// ========== AYARLAR ==========
+function showSettings() {
+  document.getElementById("setMarquee").value = config.Marquee;
+  document.getElementById("setAdminUrl").value = config.AdminUrl;
+  document.getElementById("jsonPreview").textContent = JSON.stringify(config, null, 2);
+  document.getElementById("settingsModal").classList.remove("hidden");
+}
+
+function hideSettings() {
+  config.Marquee = document.getElementById("setMarquee").value;
+  config.AdminUrl = document.getElementById("setAdminUrl").value;
+  document.getElementById("settingsModal").classList.add("hidden");
+  renderAll();
+}
+
+function copyJSON() {
+  navigator.clipboard.writeText(JSON.stringify(config, null, 2));
+  alert("JSON kopyalandı! → Kendi FRIBASE linkine yükle.");
+}
+
+// ========== DİĞER ==========
+function refreshData() {
+  if (!dataLink) {
+    alert("Bağlı bir veri linki yok, yenileme yapılamıyor.");
+    return;
+  }
+  fetch(dataLink)
+    .then(r => r.json())
+    .then(json => {
+      config = json;
+      renderAll();
+      alert("Veriler yenilendi!");
+    })
+    .catch(() => alert("Yenileme başarısız."));
+}
+
+function disconnect() {
+  if (confirm("Çıkış yapmak istediğine emin misin?")) {
+    location.reload();
+  }
+}
+
+// Enter tuşu ile bağlan
+document.getElementById("dataLink").addEventListener("keypress", e => {
+  if (e.key === "Enter") connect();
+});
+</script>
+</body>
+</html>
