@@ -1,1 +1,13 @@
-https://goldvod.org/m3u/dsmartgo.m3u
+{
+  "devices": [
+    {
+      "device_id": "b52bfe41ba8ddb48",
+
+      "username": "testuser",
+
+      "password": "pass123",
+
+      "expire_date": "2025-12-31"
+    }
+  ]
+}
